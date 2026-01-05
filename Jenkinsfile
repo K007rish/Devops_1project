@@ -28,7 +28,7 @@ pipeline {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
                     usernameVariable: 'krsh11',
-                    passwordVariable: 'Krish@987',
+                    passwordVariable: 'Krish@987'
                 )]) {
                     sh """
                       echo $Krish@987 | docker login -u $krsh11 --password-stdin

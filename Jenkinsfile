@@ -2,9 +2,12 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "react--app"
-        IMAGE_TAG  = "latest"
+        IMAGE_NAME     = "react--app"
+        IMAGE_TAG      = "latest"
         CONTAINER_NAME = "react-app-container"
+
+        
+        DOCKER = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
     }
 
     stages {
@@ -18,7 +21,7 @@ pipeline {
         stage('Verify Tools') {
             steps {
                 bat '"C:\\Program Files\\Git\\cmd\\git.exe" --version'
-                bat 'docker --version'
+                bat '"%DOCKER%" --version'
             }
         }
 
@@ -26,23 +29,23 @@ pipeline {
             steps {
                 echo 'Building Docker image'
                 bat """
-                docker build -t %IMAGE_NAME%:%IMAGE_TAG% .
+                "%DOCKER%" build -t %IMAGE_NAME%:%IMAGE_TAG% .
                 """
             }
         }
 
         stage('Docker Images') {
             steps {
-                bat 'docker images'
+                bat '"%DOCKER%" images'
             }
         }
 
         stage('Run Container') {
             steps {
-                echo ' Running container'
+                echo 'Running container'
                 bat """
-                docker rm -f %CONTAINER_NAME% 2>nul
-                docker run -d -p 3000:3000 --name %CONTAINER_NAME% %IMAGE_NAME%:%IMAGE_TAG%
+                "%DOCKER%" rm -f %CONTAINER_NAME% 2>nul
+                "%DOCKER%" run -d -p 3000:3000 --name %CONTAINER_NAME% %IMAGE_NAME%:%IMAGE_TAG%
                 """
             }
         }
@@ -50,10 +53,10 @@ pipeline {
 
     post {
         success {
-            echo ' Pipeline completed successfully'
+            echo 'Pipeline completed successfully'
         }
         failure {
-            echo ' Pipeline failed — check logs'
+            echo 'Pipeline failed — check logs'
         }
     }
 }

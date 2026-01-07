@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME     = "react--app"
+        IMAGE_NAME     = "react-app"
         IMAGE_TAG      = "latest"
         CONTAINER_NAME = "react-app-container"
 

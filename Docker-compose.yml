@@ -1,6 +1,8 @@
-version: '3.8'
+version: "3.8"
+
 services:
   react-app:
-    image: react-app
+    image: krsh11/react-app-dev:latest
     ports:
       - "80:80"
+    restart: always

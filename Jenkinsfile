@@ -1,62 +1,62 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        IMAGE_NAME     = "react-app"
-        IMAGE_TAG      = "latest"
-        CONTAINER_NAME = "react-app-container"
+  environment {
+    IMAGE_NAME = "krsh11/react-app"
+    DOCKERHUB = credentials('dockerhub-creds')
+  }
 
-        
-        DOCKER = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
+  stages {
+
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
     }
 
-    stages {
-
-        stage('Checkout Code') {
-            steps {
-                echo 'Code checked out from GitHub'
-            }
-        }
-
-        stage('Verify Tools') {
-            steps {
-                bat '"C:\\Program Files\\Git\\cmd\\git.exe" --version'
-                bat '"%DOCKER%" --version'
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                echo 'Building Docker image'
-                bat """
-                "%DOCKER%" build -t %IMAGE_NAME%:%IMAGE_TAG% .
-                """
-            }
-        }
-
-        stage('Docker Images') {
-            steps {
-                bat '"%DOCKER%" images'
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                echo 'Running container'
-                bat """
-                "%DOCKER%" rm -f %CONTAINER_NAME% 2>nul
-                "%DOCKER%" run -d -p 3000:3000 --name %CONTAINER_NAME% %IMAGE_NAME%:%IMAGE_TAG%
-                """
-            }
-        }
+    stage('Docker Login') {
+      steps {
+        sh '''
+          echo $DOCKERHUB_PSW | docker login \
+          -u $DOCKERHUB_USR --password-stdin
+        '''
+      }
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully'
+    stage('Build & Push Image') {
+      steps {
+        script {
+          if (env.BRANCH_NAME == 'dev') {
+            sh '''
+              docker build -t $IMAGE_NAME:dev .
+              docker push $IMAGE_NAME:dev
+            '''
+          }
+
+          if (env.BRANCH_NAME == 'master') {
+            sh '''
+              docker build -t $IMAGE_NAME:prod .
+              docker push $IMAGE_NAME:prod
+            '''
+          }
         }
-        failure {
-            echo 'Pipeline failed — check logs'
-        }
+      }
     }
+
+    stage('Deploy to EC2') {
+      when {
+        branch 'master'
+      }
+      steps {
+        sh '''
+          docker stop react-app || true
+          docker rm react-app || true
+          docker run -d \
+            --name react-app \
+            -p 80:80 \
+            $IMAGE_NAME:prod
+        '''
+      }
+    }
+  }
 }

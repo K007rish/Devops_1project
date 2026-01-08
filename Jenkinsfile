@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    IMAGE_NAME = "krsh11/react-app"
+    IMAGE_NAME = "krsh11/react-app:dev"
     DOCKERHUB = credentials('dockerhub-creds')
   }
 
@@ -51,10 +51,7 @@ pipeline {
         sh '''
           docker stop react-app || true
           docker rm react-app || true
-          docker run -d \
-            --name react-app \
-            -p 80:80 \
-            $IMAGE_NAME:prod
+          docker run -d --name react-app -p 80:80 $IMAGE_NAME:prod
         '''
       }
     }

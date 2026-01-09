@@ -1,5 +1,9 @@
 React Application CI/CD Pipeline on AWS
+
+
 This project demonstrates a production-ready CI/CD pipeline for a React application. It automates the process from code commit to deployment on an AWS EC2 instance using Jenkins, Docker, and Bash scripting.
+
+
 🚀 Project Overview
 The goal of this project is to deploy a React application to a production environment on port 80 [HTTP] with a fully automated pipeline that handles building, pushing to both public and private repositories, and real-time monitoring.
 🛠 Tech Stack
@@ -9,6 +13,8 @@ Containerization: Docker & Docker Compose
 Version Control: Git & GitHub
 Monitoring: Uptime Kuma
 Notifications: Discord Webhooks
+
+
 📋 Requirements & Features
 Dockerization
 Custom Dockerfile for the React application.
@@ -31,6 +37,8 @@ Security Groups:
 Port 80: Open to the world (0.0.0.0/0).
 Port 22 (SSH): Restricted to My IP only for secure management.
 Port 3001: Open for monitoring dashboard access.
+
+
 📊 Monitoring & Notifications
 Uptime Kuma: An open-source monitoring system checks the health status of the application on Port 80.
 Alerting: Configured to send notifications via Discord Webhooks only if the application goes down.
@@ -42,6 +50,8 @@ The principal goal of this project is to establish an end-to-end, zero-downtime 
 Automated Building and Containerization: Creating portable, self-contained Docker images for the application.
 Dual Repository Strategy: Maintaining separation and security by pushing images to both public (development) and private (production) Docker Hub repositories.
 Real-Time Application Health Monitoring: Implementing an external monitoring solution to ensure the application remains operational and to provide instant alerts in case of failure.
+
+
 🛠 Detailed Technology Stack and Rationale
 
 The selection of the following technologies was made to ensure a scalable, maintainable, and secure CI/CD environment:
@@ -66,6 +76,8 @@ An open-source, user-friendly monitoring tool deployed alongside the application
 Notifications
 Discord Webhooks
 Provides a fast, low-latency channel for sending critical, actionable alerts directly to the development/operations team in case of a service disruption.
+
+
 
 📋 Essential Requirements and Pipeline FeaturesRobust Dockerization Strategy
 
@@ -98,6 +110,8 @@ The AWS EC2 instance is configured with a focus on security and accessibility:
 Target Application Port: Port 80 (HTTP) is opened globally (0.0.0.0/0) on the Security Group, as this is the port where the final application is served to the end-users.
 Secure Management: Port 22 (SSH), used for remote server management and deployment execution, is strictly limited to My IP (a specific, authorized IP address). This minimizes the risk of unauthorized access to the underlying infrastructure.
 Monitoring Access: Port 3001 is opened to allow access to the Uptime Kuma monitoring dashboard interface.
+
+
 📊 Comprehensive Monitoring and Alerting System
 
 Reliability is paramount, and a dedicated monitoring system ensures application uptime:

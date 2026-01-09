@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    IMAGE_NAME = "krsh11/react-app:dev"
+    IMAGE_NAME = "krsh11/react-app"
     DOCKERHUB = credentials('dockerhub-creds')
   }
 

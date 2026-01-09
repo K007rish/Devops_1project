@@ -24,19 +24,13 @@ pipeline {
         stage('Build & Push Image') {
             steps {
                 script {
-                    // Changed to env.GIT_BRANCH and checking for contains 'master' or 'dev'
                     if (env.GIT_BRANCH.contains('dev')) {
-                        sh '''
-                        docker build -t $IMAGE_NAME:dev .
-                        docker push $IMAGE_NAME:dev
-                        '''
+                        sh "docker build -t krsh11/react-app:dev ."
+                        sh "docker push krsh11/react-app:dev"
                     } else if (env.GIT_BRANCH.contains('master')) {
-                        sh '''
-                        docker build -t $IMAGE_NAME:prod .
-                        docker push $IMAGE_NAME:prod
-                        '''
-                    } else {
-                        echo "Current branch is ${env.GIT_BRANCH}. No build logic defined for this branch."
+                        // Push to the private repository for production
+                        sh "docker build -t krsh11/react-app-prod:latest ."
+                        sh "docker push krsh11/react-app-prod:latest"
                     }
                 }
             }

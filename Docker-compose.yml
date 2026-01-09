@@ -1,8 +1,10 @@
-version: "3.8"
-
+version: '3.8'
 services:
   react-app:
-    image: krsh11/react-app-dev:latest
+    # Use your specific production private repo name
+    image: krsh11/react-app-prod:latest
+    container_name: react-app
     ports:
-      - "80:80"
+      - "80:80"  # This satisfies the Port 80 requirement
     restart: always
+    

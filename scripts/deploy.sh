@@ -1,12 +1,6 @@
 #!/bin/bash
-set -e
-
-IMAGE=krsh11/react-app-prod
-
-docker stop react-app || true
-docker rm react-app || true
-
-docker run -d \
-  --name react-app \
-  -p 80:80 \
-  $IMAGE:latest
+# Move to the directory containing docker-compose.yml
+cd /var/lib/jenkins/workspace/react-app-pipeline
+docker-compose down || true
+docker-compose pull
+docker-compose up -d
